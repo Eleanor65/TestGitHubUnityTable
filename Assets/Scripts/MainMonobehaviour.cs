@@ -12,7 +12,9 @@ namespace GitHubUnityTable
         
         private void Start()
         {
-            StartCoroutine(DownloadRepoInfoString());
+            //StartCoroutine(DownloadRepoInfoString());
+
+            DownloadConstResponse();
         }
 
         private IEnumerator DownloadRepoInfoString()
@@ -23,8 +25,20 @@ namespace GitHubUnityTable
                 _repoInfoString = www.text;
             }
 
-            var jArray = JArray.Parse(_repoInfoString);
+            var jArray = GetJArrayFromResponse();
             Debug.Log(jArray);
+        }
+
+        private void DownloadConstResponse()
+        {
+            _repoInfoString = RepositoriesResponse.ResponseString;
+            var jArray = GetJArrayFromResponse();
+            Debug.Log(jArray);
+        }
+
+        private JArray GetJArrayFromResponse()
+        {
+            return JArray.Parse(_repoInfoString);
         }
     }
 }
