@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using GitHubUnityTable.InfoDowloaders;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -8,41 +9,20 @@ namespace GitHubUnityTable
     {
         private const string Url = "https://api.github.com/users/Eleanor65/repos";
 
-        private string _repoInfoString;
-        
         private void Start()
         {
-            //StartCoroutine(DownloadRepoInfoString());
+            //var wwwDownloader = new GameObject("WWWDownloader", typeof(WWWInfoDownloader))
+            //    .GetComponent<WWWInfoDownloader>();
 
-            DownloadConstResponse();
+            //wwwDownloader.DownloadInfo(Url, ParseRepositoryResponse);
+
+            var fakeDownloader = new FakeDownloader();
+            fakeDownloader.DownloadInfo(Url, ParseRepositoryResponse);
         }
 
-        private IEnumerator DownloadRepoInfoString()
+        private void ParseRepositoryResponse(string response)
         {
-            using (WWW www = new WWW(Url))
-            {
-                yield return www;
-                _repoInfoString = www.text;
-            }
-
-            var jArray = GetJArrayFromResponse();
-            Debug.Log(jArray);
-        }
-
-        private void DownloadConstResponse()
-        {
-            _repoInfoString = RepositoriesResponse.ResponseString;
-            var jArray = GetJArrayFromResponse();
-            ParseRepositoryArray(jArray);
-        }
-
-        private JArray GetJArrayFromResponse()
-        {
-            return JArray.Parse(_repoInfoString);
-        }
-
-        private void ParseRepositoryArray(JArray jArray)
-        {
+            var jArray = JArray.Parse(response);
             foreach (var jToken in jArray)
             {
                 var jName = jToken["name"];
