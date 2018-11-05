@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GitHubUnityTable.InfoProviders;
 using UnityEngine;
@@ -12,6 +13,11 @@ namespace GitHubUnityTable.Save
         private RepositoryInfo[] _repositories;
 
         public event Action<ISavePart> OnChanged = _ => { };
+
+        public IEnumerable<RepositoryInfo> RepositoryInfos
+        {
+            get { return _repositories; }
+        }
 
         public RepositoriesInfoSave()
         {

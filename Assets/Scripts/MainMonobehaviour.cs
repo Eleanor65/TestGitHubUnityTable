@@ -1,6 +1,8 @@
-﻿using GitHubUnityTable.InfoDowloaders;
+﻿using System.Linq;
+using GitHubUnityTable.InfoDowloaders;
 using GitHubUnityTable.InfoProviders;
 using GitHubUnityTable.Save;
+using GitHubUnityTable.Ui;
 using UnityEngine;
 
 namespace GitHubUnityTable
@@ -8,6 +10,9 @@ namespace GitHubUnityTable
     public class MainMonobehaviour : MonoBehaviour
     {
         private const string UserName = "Eleanor65";
+
+        [SerializeField]
+        private RepositoriesTableView _repositoriesTableView;
 
         private IInfoDownloader _downloader;
         private Saves _saves;
@@ -27,6 +32,8 @@ namespace GitHubUnityTable
         {
             _saves = new Saves();
             _repositoriesInfoSave = _saves.RepositoriesInfoSave;
+            _repositoriesTableView.SetData(_repositoriesInfoSave.RepositoryInfos
+                .Select(ri => new RepositoryData() {RepositoryInfo = ri}).ToArray());
 
             var repositoriesInfoProvider = new RepositoriesInfoProvider(Downloader);
 
