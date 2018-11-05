@@ -9,12 +9,10 @@ namespace GitHubUnityTable.InfoProviders
 
         public static RepositoryInfo ToRepositoryInfo(this JToken jtoken)
         {
-            var name = jtoken[RepoNameKey];
-
             return new RepositoryInfo()
             {
-                Name = jtoken[RepoNameKey].ToString(),
-                DefaultBranch = jtoken[DefaultBranchKey].ToString()
+                Name = jtoken[RepoNameKey].Value<string>(),
+                DefaultBranch = jtoken[DefaultBranchKey].Value<string>()
             };
         }
     }

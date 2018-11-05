@@ -18,10 +18,10 @@ namespace GitHubUnityTable.InfoProviders
         {
             return new CommitInfo
             {
-                Sha = jtoken[ShaKey].ToString(),
-                Author = jtoken[CommitKey][AuthorKey][AuthorNameKey].ToString(),
-                Email = jtoken[CommitKey][AuthorKey][AuthorEmailKey].ToString(),
-                Message = jtoken[CommitKey][MessageKey].ToString()
+                Sha = jtoken[ShaKey].Value<string>(),
+                Author = jtoken[CommitKey][AuthorKey][AuthorNameKey].Value<string>(),
+                Email = jtoken[CommitKey][AuthorKey][AuthorEmailKey].Value<string>(),
+                Message = jtoken[CommitKey][MessageKey].Value<string>()
             };
         }
     }
