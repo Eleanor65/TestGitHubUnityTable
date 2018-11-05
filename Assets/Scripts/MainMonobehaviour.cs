@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using GitHubUnityTable.InfoDowloaders;
 using GitHubUnityTable.InfoProviders;
 using GitHubUnityTable.Save;
@@ -17,6 +18,7 @@ namespace GitHubUnityTable
         private IInfoDownloader _downloader;
         private Saves _saves;
         private RepositoriesInfoSave _repositoriesInfoSave;
+        private RepositoryData[] _datas;
 
         private IInfoDownloader Downloader
         {
@@ -32,38 +34,37 @@ namespace GitHubUnityTable
         {
             _saves = new Saves();
             _repositoriesInfoSave = _saves.RepositoriesInfoSave;
-            _repositoriesTableView.SetData(_repositoriesInfoSave.RepositoryInfos
-                .Select(ri => new RepositoryData() {RepositoryInfo = ri}).ToArray());
+            SetRepositoryInfosToTable(_repositoriesInfoSave.RepositoryInfos);
 
             var repositoriesInfoProvider = new RepositoriesInfoProvider(Downloader);
 
-            repositoriesInfoProvider.DownloadRepositoryInfos(UserName, infos =>
-            {
-                foreach (var repositoryInfo in infos)
-                {
-                    Debug.LogFormat("rep name = {0}, default_branch = {1}", repositoryInfo.Name,
-                        repositoryInfo.DefaultBranch);
-                }
+            repositoriesInfoProvider.DownloadRepositoryInfos(UserName, OnRepositoriesDownloaded);
+        }
 
-                _repositoriesInfoSave.SetRepositories(infos);
-                DownloadLastCommitsInfo(infos);
-            });
+        private void OnRepositoriesDownloaded(RepositoryInfo[] infos)
+        {
+            SetRepositoryInfosToTable(infos);
+            DownloadLastCommitsInfo(infos);
         }
 
         private void DownloadLastCommitsInfo(RepositoryInfo[] repositories)
         {
-            var commitInfoProvider = new CommitInfoProvider(Downloader);
-
-            foreach (var repository in repositories)
-            {
-                commitInfoProvider.DownloadLastCommitInfo(UserName, repository.Name, PrintCommitInfo);
-            }
+            var commitInfoProvider = new CommitInfoProvider(Downloader, UserName,
+                repositories.Select(r => r.Name).ToArray(), SetRepositoryLastCommit);
+            commitInfoProvider.Download();
         }
 
-        private void PrintCommitInfo(CommitInfo commitInfo)
+        private void SetRepositoryInfosToTable(IEnumerable<RepositoryInfo> infos)
         {
-            Debug.LogFormat("Commit sha = {0}, author = {1}, email = {2}, message = '{3}'", commitInfo.Sha,
-                commitInfo.Author, commitInfo.Email, commitInfo.Message);
+            _datas = infos.Select(i => new RepositoryData {RepositoryInfo = i}).ToArray();
+            _repositoriesTableView.SetData(_datas);
+        }
+
+        private void SetRepositoryLastCommit(CommitInfo commitInfo)
+        {
+            var data = _datas.First(d => d.RepositoryInfo.Name == commitInfo.RepositoryName);
+            data.CommitInfo = commitInfo;
+            _repositoriesTableView.SetData(_datas);
         }
     }
 }
