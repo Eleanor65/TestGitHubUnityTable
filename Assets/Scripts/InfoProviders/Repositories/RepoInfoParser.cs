@@ -6,13 +6,15 @@ namespace GitHubUnityTable.InfoProviders
     {
         private const string RepoNameKey = "name";
         private const string DefaultBranchKey = "default_branch";
+        private const string UpdatedAtKey = "updated_at";
 
-        public static RepositoryInfo ToRepositoryInfo(this JToken jtoken)
+        public static RepositoryInfo ToRepositoryInfo(this JToken jToken)
         {
             return new RepositoryInfo()
             {
-                Name = jtoken[RepoNameKey].Value<string>(),
-                DefaultBranch = jtoken[DefaultBranchKey].Value<string>()
+                Name = jToken[RepoNameKey].Value<string>(),
+                DefaultBranch = jToken[DefaultBranchKey].Value<string>(),
+                UpdatedAt = jToken[UpdatedAtKey].Value<string>(),
             };
         }
     }

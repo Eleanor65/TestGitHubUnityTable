@@ -14,14 +14,14 @@ namespace GitHubUnityTable.InfoProviders
 
         private const string MessageKey = "message";
 
-        public static CommitInfo ToCommitInfo(this JToken jtoken)
+        public static CommitInfo ToCommitInfo(this JToken jToken)
         {
             return new CommitInfo
             {
-                Sha = jtoken[ShaKey].Value<string>(),
-                Author = jtoken[CommitKey][AuthorKey][AuthorNameKey].Value<string>(),
-                Email = jtoken[CommitKey][AuthorKey][AuthorEmailKey].Value<string>(),
-                Message = jtoken[CommitKey][MessageKey].Value<string>()
+                Sha = jToken[ShaKey].Value<string>(),
+                Author = jToken[CommitKey][AuthorKey][AuthorNameKey].Value<string>(),
+                Email = jToken[CommitKey][AuthorKey][AuthorEmailKey].Value<string>(),
+                Message = jToken[CommitKey][MessageKey].Value<string>()
             };
         }
     }
