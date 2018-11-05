@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using GitHubUnityTable.InfoDowloaders;
+using GitHubUnityTable.InfoProviders;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
@@ -7,27 +8,22 @@ namespace GitHubUnityTable
 {
     public class MainMonobehaviour : MonoBehaviour
     {
-        private const string Url = "https://api.github.com/users/Eleanor65/repos";
-
         private void Start()
         {
-            //var wwwDownloader = new GameObject("WWWDownloader", typeof(WWWInfoDownloader))
+            //var downloader = new GameObject("WWWDownloader", typeof(WWWInfoDownloader))
             //    .GetComponent<WWWInfoDownloader>();
+            var downloader = new FakeDownloader();
 
-            //wwwDownloader.DownloadInfo(Url, ParseRepositoryResponse);
+            var repositoriesInfoProvider = new RepositoriesInfoProvider(downloader);
 
-            var fakeDownloader = new FakeDownloader();
-            fakeDownloader.DownloadInfo(Url, ParseRepositoryResponse);
-        }
-
-        private void ParseRepositoryResponse(string response)
-        {
-            var jArray = JArray.Parse(response);
-            foreach (var jToken in jArray)
+            repositoriesInfoProvider.DownloadRepositoryInfos(infos =>
             {
-                var jName = jToken["name"];
-                Debug.LogFormat("name = {0}", jName);
-            }
+                foreach (var repositoryInfo in infos)
+                {
+                    Debug.LogFormat("rep name = {0}, default_branch = {1}", repositoryInfo.Name,
+                        repositoryInfo.DefaultBranch);
+                }
+            });
         }
     }
 }
