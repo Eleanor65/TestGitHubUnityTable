@@ -33,12 +33,21 @@ namespace GitHubUnityTable
         {
             _repoInfoString = RepositoriesResponse.ResponseString;
             var jArray = GetJArrayFromResponse();
-            Debug.Log(jArray);
+            ParseRepositoryArray(jArray);
         }
 
         private JArray GetJArrayFromResponse()
         {
             return JArray.Parse(_repoInfoString);
+        }
+
+        private void ParseRepositoryArray(JArray jArray)
+        {
+            foreach (var jToken in jArray)
+            {
+                var jName = jToken["name"];
+                Debug.LogFormat("name = {0}", jName);
+            }
         }
     }
 }
