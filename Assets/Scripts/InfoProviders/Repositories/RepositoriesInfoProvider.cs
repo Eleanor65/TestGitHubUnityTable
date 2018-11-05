@@ -6,7 +6,7 @@ namespace GitHubUnityTable.InfoProviders
 {
     public class RepositoriesInfoProvider
     {
-        private const string RepositoriesInfoUrl = "https://api.github.com/users/Eleanor65/repos";
+        private const string RepositoriesUrl = "https://api.github.com/users/{0}/repos";
 
         private readonly IInfoDownloader _downloader;
 
@@ -15,9 +15,10 @@ namespace GitHubUnityTable.InfoProviders
             _downloader = downloader;
         }
 
-        public void DownloadRepositoryInfos(Action<RepositoryInfo[]> onComplete)
+        public void DownloadRepositoryInfos(string userName, Action<RepositoryInfo[]> onComplete)
         {
-            _downloader.DownloadInfo(RepositoriesInfoUrl, response => OnDownloadedResponse(response, onComplete));
+            var url = string.Format(RepositoriesUrl, userName);
+            _downloader.DownloadInfo(url, response => OnDownloadedResponse(response, onComplete));
         }
 
         private void OnDownloadedResponse(string responseString, Action<RepositoryInfo[]> onComplete)
