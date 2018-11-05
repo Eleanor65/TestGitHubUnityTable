@@ -39,7 +39,6 @@ namespace GitHubUnityTable
             var repositoriesInfoProvider = new RepositoriesInfoProvider(Downloader);
 
             repositoriesInfoProvider.DownloadRepositoryInfos(UserName, OnRepositoriesDownloaded);
-            Debug.Break();
         }
 
         private void OnRepositoriesDownloaded(RepositoryInfo[] infos)
@@ -47,7 +46,6 @@ namespace GitHubUnityTable
             _repositoriesInfoSave.SetRepositories(infos);
             SetRepositoryInfosToTable(infos);
             DownloadLastCommitsInfo(infos);
-            Debug.Break();
         }
 
         private void DownloadLastCommitsInfo(RepositoryInfo[] repositories)
