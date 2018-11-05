@@ -30,5 +30,14 @@ namespace GitHubUnityTable.InfoProviders
             get { return _updatedAt; }
             set { _updatedAt = value; }
         }
+
+        public override bool Equals(object obj)
+        {
+            var info = obj as RepositoryInfo;
+            return info != null &&
+                   _name == info._name &&
+                   _defaultBranch == info._defaultBranch &&
+                   _updatedAt == info._updatedAt;
+        }
     }
 }

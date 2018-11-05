@@ -1,5 +1,6 @@
 ﻿using GitHubUnityTable.InfoDowloaders;
 using GitHubUnityTable.InfoProviders;
+using GitHubUnityTable.Save;
 using UnityEngine;
 
 namespace GitHubUnityTable
@@ -9,6 +10,8 @@ namespace GitHubUnityTable
         private const string UserName = "Eleanor65";
 
         private IInfoDownloader _downloader;
+        private Saves _saves;
+        private RepositoriesInfoSave _repositoriesInfoSave;
 
         private IInfoDownloader Downloader
         {
@@ -22,6 +25,9 @@ namespace GitHubUnityTable
 
         private void Start()
         {
+            _saves = new Saves();
+            _repositoriesInfoSave = _saves.RepositoriesInfoSave;
+
             var repositoriesInfoProvider = new RepositoriesInfoProvider(Downloader);
 
             repositoriesInfoProvider.DownloadRepositoryInfos(UserName, infos =>
@@ -30,8 +36,9 @@ namespace GitHubUnityTable
                 {
                     Debug.LogFormat("rep name = {0}, default_branch = {1}", repositoryInfo.Name,
                         repositoryInfo.DefaultBranch);
-
                 }
+
+                _repositoriesInfoSave.SetRepositories(infos);
                 DownloadLastCommitsInfo(infos);
             });
         }
