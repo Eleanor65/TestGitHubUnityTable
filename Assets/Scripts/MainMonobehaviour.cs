@@ -10,7 +10,7 @@ namespace GitHubUnityTable
 {
     public class MainMonobehaviour : MonoBehaviour
     {
-        private const string UserName = "Eleanor65";
+        private const string UserName = "mralexgray";
 
         [SerializeField]
         private RepositoriesTableView _repositoriesTableView;
@@ -39,12 +39,15 @@ namespace GitHubUnityTable
             var repositoriesInfoProvider = new RepositoriesInfoProvider(Downloader);
 
             repositoriesInfoProvider.DownloadRepositoryInfos(UserName, OnRepositoriesDownloaded);
+            Debug.Break();
         }
 
         private void OnRepositoriesDownloaded(RepositoryInfo[] infos)
         {
+            _repositoriesInfoSave.SetRepositories(infos);
             SetRepositoryInfosToTable(infos);
             DownloadLastCommitsInfo(infos);
+            Debug.Break();
         }
 
         private void DownloadLastCommitsInfo(RepositoryInfo[] repositories)

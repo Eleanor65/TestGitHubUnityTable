@@ -24,5 +24,13 @@ namespace GitHubUnityTable.InfoProviders
                 Message = jToken[CommitKey][MessageKey].Value<string>()
             };
         }
+
+        public static CommitInfo ToEmptyCommitInfo(this JToken jToken)
+        {
+            return new CommitInfo
+            {
+                Message = jToken[MessageKey].Value<string>()
+            };
+        }
     }
 }

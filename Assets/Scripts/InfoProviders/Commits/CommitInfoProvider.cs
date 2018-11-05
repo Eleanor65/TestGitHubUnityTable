@@ -53,8 +53,20 @@ namespace GitHubUnityTable.InfoProviders
 
         private void OnDownloadedResponse(string response)
         {
-            var jToken = JArray.Parse(response)[0];
-            var commitInfo = jToken.ToCommitInfo();
+            JToken jToken;
+            CommitInfo commitInfo;
+
+            try
+            {
+                jToken = JArray.Parse(response)[0];
+                commitInfo = jToken.ToCommitInfo();
+            }
+            catch (Exception e)
+            {
+                jToken = JToken.Parse(response);
+                commitInfo = jToken.ToEmptyCommitInfo();
+            }
+
             commitInfo.RepositoryName = _repositoryNames[_index];
             _onNext(commitInfo);
 
